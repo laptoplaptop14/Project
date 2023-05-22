@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/item" app:showAsAction="always" android:title="" android:icon="@drawable/menu_logo">
+        <menu>
+            <item android:title="Add Employee" app:showAsAction="never" android:icon="@drawable/person" android:id="@+id/addemp" />
+            <item android:title="View Employee" app:showAsAction="never" android:icon="@drawable/person" android:id="@+id/viewEmployee" />
+            <item android:title="View Location" app:showAsAction="never" android:icon="@drawable/location" android:id="@+id/viewLocation" />
+            <item android:title="View Profile" app:showAsAction="never" android:icon="@drawable/person" android:id="@+id/viewprofile" />
+            <item android:title="Logout" app:showAsAction="never" android:icon="@drawable/logout" android:id="@+id/logout" />
+        </menu>
+    </item>
+
+</menu>

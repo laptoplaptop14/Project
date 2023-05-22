@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "829995701721",
+    "project_id": "employee-tracking-a46b4",
+    "storage_bucket": "employee-tracking-a46b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:829995701721:android:bd1ca0907511980b4bf5c8",
+        "android_client_info": {
+          "package_name": "com.example.employeetracking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "829995701721-g4tffmrvae5r1m6oes53jb4ppfn945ie.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrqtQUp-oUJrMJJCi9YRmhUo4X69hoa_k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "829995701721-g4tffmrvae5r1m6oes53jb4ppfn945ie.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
