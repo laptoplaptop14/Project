@@ -22,6 +22,17 @@
 
 
         <ImageView
+            android:id="@+id/imgDelete"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="5dp"
+            android:src="@drawable/ic_remove"
+            android:layout_margin="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageView
             android:id="@+id/img"
             android:layout_width="55dp"
             android:layout_height="55dp"

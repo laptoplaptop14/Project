@@ -41,7 +41,7 @@ public class AdminDashboard extends AppCompatActivity {
 
         image=(ImageView)findViewById(R.id.imageView);
         name=(TextView)findViewById(R.id.text1);
-        company=(TextView)findViewById(R.id.text2);
+       // company=(TextView)findViewById(R.id.text2);
 
         text=(TextView)findViewById(R.id.cardtext);
         count=(TextView)findViewById(R.id.countemp);
@@ -75,7 +75,7 @@ public class AdminDashboard extends AppCompatActivity {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     private void CountEmployee()
     {
-        ref.child("Employee").child(Uid).addValueEventListener(new ValueEventListener() {
+        ref.child("Employee").orderByChild("Userid").equalTo(Uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String countemp=String.valueOf(snapshot.getChildrenCount());

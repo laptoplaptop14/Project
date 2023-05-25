@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,11 +16,13 @@ public class MyAdpater extends RecyclerView.Adapter<MyAdpater.MyViewHolder>
 {
 
     Context context;
-    ArrayList<View_Employee_Detail> view_employee_detailArrayList;
+    public ArrayList<View_Employee_Detail> view_employee_detailArrayList;
+    onclick onclick;
 
-    public MyAdpater(Context context, ArrayList<View_Employee_Detail> view_employee_detailArrayList) {
+    public MyAdpater(Context context, ArrayList<View_Employee_Detail> view_employee_detailArrayList,onclick onclick) {
         this.context = context;
         this.view_employee_detailArrayList = view_employee_detailArrayList;
+        this.onclick = onclick;
     }
 
     @NonNull
@@ -37,6 +40,12 @@ public class MyAdpater extends RecyclerView.Adapter<MyAdpater.MyViewHolder>
 
         holder.name.setText(view_employee_detail.name);
         holder.designation.setText(view_employee_detail.designation);
+        holder.imgDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onclick.onDelete(view_employee_detail.getId());
+            }
+        });
     }
 
     @Override
@@ -48,14 +57,20 @@ public class MyAdpater extends RecyclerView.Adapter<MyAdpater.MyViewHolder>
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
         TextView name,designation;
+        ImageView imgDelete;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             name=itemView.findViewById(R.id.viewname);
             designation=itemView.findViewById(R.id.viewdesignation);
+            imgDelete = itemView.findViewById(R.id.imgDelete);
         }
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public interface onclick{
+        public void onDelete(String id);
+    }
+
 
 }

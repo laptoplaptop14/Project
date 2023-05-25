@@ -96,7 +96,7 @@ public class AddEmployee extends AppCompatActivity {
         db.put("designation",designation);
         db.put("salary",salary);
 
-        ref.child("Employee").child(Userdid).child(name).setValue(db);
+        ref.child("Employee").child(id).setValue(db);
 
         Toast.makeText(this, "Add Employee Successful", Toast.LENGTH_SHORT).show();
 

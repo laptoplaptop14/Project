@@ -2,7 +2,7 @@ package com.example.employeetracking;
 
 public class View_Employee_Detail {
 
-    String name,designation;
+    String name,designation,id;
 
     public View_Employee_Detail() {
     }
@@ -10,6 +10,15 @@ public class View_Employee_Detail {
     public View_Employee_Detail(String name, String designation) {
         this.name = name;
         this.designation = designation;
+    }
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

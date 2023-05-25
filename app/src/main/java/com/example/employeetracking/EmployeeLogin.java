@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.employeetracking.model.Employee;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -61,11 +62,7 @@ public class EmployeeLogin extends AppCompatActivity {
                 }
                 else
                 {
-
-                    Intent intent=new Intent(EmployeeLogin.this,EmployeeDashboard.class);
-                    startActivity(intent);
-                    finish();
-                    //LoginWithEmployee(email,password);
+                    LoginWithEmployee(email,password);
                 }
             }
         });
@@ -82,47 +79,45 @@ public class EmployeeLogin extends AppCompatActivity {
     ///////////////////////////////////////////////////////////////////////////////////////////////
     private void LoginWithEmployee(String email, String password)
     {
-        Query em=ref.child("Employee Tracking").child("Employee").child("Userid").equalTo(email);
+        Query em=ref.child("Employee Tracking").child("Employee").orderByChild("email").equalTo(email);
         em.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                System.out.println(snapshot.getValue().toString());
-            }
+                boolean emailExists = false;
+                Employee employeeData;
+                int i = 0;
+                for (DataSnapshot employeeSnapshot : snapshot.getChildren()) {
+                    Employee employee = employeeSnapshot.getValue(Employee.class);
+                    i++;
+                    // Check if the provided password matches the employee's password
+                    if (employee.password.equals(password)) {
+                        // Email and password combination exists in Firebase Realtime Database
+                        emailExists = true;
+                        employeeData = employee;
+                        break;
+                    }
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
-    }
-    private void CheckPassword(String password)
-    {
-        Query pa=ref.child("Employee").child("id").child("name").orderByChild("password").equalTo(password);
-        pa.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists())
-                {
-                    Toast.makeText(EmployeeLogin.this, "Login Successful", Toast.LENGTH_SHORT).show();
-
-                    e1.setText("");
-                    e2.setText("");
-
+                if (emailExists){
+                    Toast.makeText(EmployeeLogin.this, "You have successfully login", Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent(EmployeeLogin.this,EmployeeDashboard.class);
                     startActivity(intent);
                     finish();
-                }
-                else
-                {
-                    Toast.makeText(EmployeeLogin.this, "Wrong Password", Toast.LENGTH_SHORT).show();
+                }else{
+                    if (i > 0){
+                        Toast.makeText(EmployeeLogin.this, "Enter Valid Password", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(EmployeeLogin.this, "Account not match", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(EmployeeLogin.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
         });
     }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
+
 }
