@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.employeetracking.model.View_Employee_Detail;
+
 import java.util.ArrayList;
 
 public class MyAdpater extends RecyclerView.Adapter<MyAdpater.MyViewHolder>

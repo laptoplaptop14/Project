@@ -1,4 +1,4 @@
-package com.example.employeetracking;
+package com.example.employeetracking.model;
 
 public class View_Employee_Detail {
 

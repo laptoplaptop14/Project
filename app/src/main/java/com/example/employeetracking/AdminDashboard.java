@@ -46,8 +46,7 @@ public class AdminDashboard extends AppCompatActivity {
         text=(TextView)findViewById(R.id.cardtext);
         count=(TextView)findViewById(R.id.countemp);
 
-        Intent intent=getIntent();
-        Uid=intent.getStringExtra("Userid");
+        Uid=AppPref.getInstance(getApplicationContext()).getAdminData().id;
 
         AdminProfileName();
         CountEmployee();
@@ -123,8 +122,10 @@ public class AdminDashboard extends AppCompatActivity {
             startActivity(intent);
         }
         else if (imt_id==R.id.logout){
+            AppPref.getInstance(getApplicationContext()).clearData();
             Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
             Intent intent=new Intent(AdminDashboard.this,AdminLogin.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
         }

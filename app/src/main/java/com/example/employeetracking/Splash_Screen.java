@@ -23,9 +23,23 @@ public class Splash_Screen extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent=new Intent(Splash_Screen.this,GetStart.class);
-                startActivity(intent);
-                finish();
+
+                if (AppPref.getInstance(getApplicationContext()).getAdminData() != null){
+                    Intent intent=new Intent(Splash_Screen.this,AdminDashboard.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                }else if (AppPref.getInstance(getApplicationContext()).getEmployeeData() != null){
+                    Intent intent=new Intent(Splash_Screen.this,EmployeeDashboard.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    Intent intent=new Intent(Splash_Screen.this,GetStart.class);
+                    startActivity(intent);
+                    finish();
+                }
+
             }
         },4000);
     }

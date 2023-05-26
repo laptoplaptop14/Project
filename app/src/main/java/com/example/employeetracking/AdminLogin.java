@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.employeetracking.model.Admin;
+import com.example.employeetracking.model.View_Employee_Detail;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -117,7 +119,9 @@ public class AdminLogin extends AppCompatActivity {
                 {
                     for(DataSnapshot dataSnapshot : snapshot.getChildren())
                     {
-                        Uid=dataSnapshot.child("id").getValue().toString();
+                        Admin admin =dataSnapshot.getValue(Admin.class);
+                        AppPref.getInstance(getApplicationContext()).setAdminData(admin);
+                        break;
                     }
                     Toast.makeText(AdminLogin.this, "Login Successful", Toast.LENGTH_SHORT).show();
 
@@ -125,7 +129,7 @@ public class AdminLogin extends AppCompatActivity {
                     e2.setText("");
 
                     Intent intent=new Intent(AdminLogin.this,AdminDashboard.class);
-                    intent.putExtra("Userid",Uid);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();
                 }

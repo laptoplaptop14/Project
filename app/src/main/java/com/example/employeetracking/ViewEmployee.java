@@ -1,17 +1,14 @@
 package com.example.employeetracking;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.employeetracking.model.View_Employee_Detail;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;

@@ -84,7 +84,7 @@ public class EmployeeLogin extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean emailExists = false;
-                Employee employeeData;
+                Employee employeeData = null;
                 int i = 0;
                 for (DataSnapshot employeeSnapshot : snapshot.getChildren()) {
                     Employee employee = employeeSnapshot.getValue(Employee.class);
@@ -100,8 +100,10 @@ public class EmployeeLogin extends AppCompatActivity {
 
 
                 if (emailExists){
+                    AppPref.getInstance(getApplicationContext()).setEmployeeData(employeeData);
                     Toast.makeText(EmployeeLogin.this, "You have successfully login", Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent(EmployeeLogin.this,EmployeeDashboard.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();
                 }else{
