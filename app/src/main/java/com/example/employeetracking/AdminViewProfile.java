@@ -49,7 +49,6 @@ public class AdminViewProfile extends AppCompatActivity {
                         email.setText(String.valueOf(snapshot.child("email").getValue().toString()));
                         mono.setText(String.valueOf(snapshot.child("mobileno").getValue().toString()));
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
 

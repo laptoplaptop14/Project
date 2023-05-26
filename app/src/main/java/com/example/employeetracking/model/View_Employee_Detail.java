@@ -2,7 +2,7 @@ package com.example.employeetracking.model;
 
 public class View_Employee_Detail {
 
-    String name,designation,id;
+    public String name,designation,id;
 
     public View_Employee_Detail() {
     }
