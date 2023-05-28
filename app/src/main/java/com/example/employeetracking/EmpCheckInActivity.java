@@ -45,7 +45,7 @@ public class EmpCheckInActivity extends AppCompatActivity {
     }
 
     private void getEmpData() {
-        ref.child("empCheckIn").child(empId).addValueEventListener(new ValueEventListener() {
+        ref.child("empCheckIn").orderByChild("employeeId").equalTo(empId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
