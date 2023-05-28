@@ -135,7 +135,7 @@ public class AdminDashboard extends AppCompatActivity {
         else if (imt_id==R.id.logout){
             AppPref.getInstance(getApplicationContext()).clearData();
             Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
-            Intent intent=new Intent(AdminDashboard.this,AdminLogin.class);
+            Intent intent=new Intent(AdminDashboard.this,SelectActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();

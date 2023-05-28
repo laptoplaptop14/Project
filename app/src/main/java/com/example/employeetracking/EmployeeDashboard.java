@@ -60,7 +60,7 @@ import java.util.Locale;
 public class EmployeeDashboard extends AppCompatActivity implements Listener, OnMapReadyCallback, LocationData.AddressCallBack {
 
     EasyWayLocation easyWayLocation;
-    Button b1;
+    Button b1,btnLogout;
 
     GetLocationDetail getLocationDetail;
     LatLng latLng;
@@ -78,6 +78,8 @@ public class EmployeeDashboard extends AppCompatActivity implements Listener, On
         data=FirebaseDatabase.getInstance();
         ref=data.getReference().child("Employee Tracking");
         b1 = (Button) findViewById(R.id.checkin);
+        btnLogout = (Button) findViewById(R.id.btnLogout);
+
 
         PermissionX.init(this)
                 .permissions(android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -95,6 +97,18 @@ public class EmployeeDashboard extends AppCompatActivity implements Listener, On
                 }else{
                     Toast.makeText(EmployeeDashboard.this, "Your Location not working...", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppPref.getInstance(getApplicationContext()).clearData();
+                Toast.makeText(getApplicationContext(), "Logout", Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(EmployeeDashboard.this,SelectActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
             }
         });
     }
