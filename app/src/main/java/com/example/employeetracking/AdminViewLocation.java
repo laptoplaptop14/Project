@@ -1,13 +1,19 @@
 package com.example.employeetracking;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.widget.Button;
@@ -27,6 +33,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -46,13 +53,15 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.permissionx.guolindev.PermissionX;
+import com.permissionx.guolindev.callback.RequestCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdminViewLocation extends AppCompatActivity implements Listener, OnMapReadyCallback{
 
-    SupportMapFragment smf;
+
     EasyWayLocation easyWayLocation;
     LatLng latLng;
     GoogleMap map;
@@ -70,21 +79,15 @@ public class AdminViewLocation extends AppCompatActivity implements Listener, On
         data=FirebaseDatabase.getInstance();
         ref=data.getReference().child("Employee Tracking");
 
-        smf = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
-
-        Dexter.withContext(getApplicationContext())
-                .withPermissions(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION)
-                .withListener(new MultiplePermissionsListener() {
+        PermissionX.init(this)
+                .permissions(android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                .request(new RequestCallback() {
                     @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
-                        getCurrentLocation();
+                    public void onResult(boolean allGranted, @NonNull List<String> grantedList, @NonNull List<String> deniedList) {
+                     getCurrentLocation();
                     }
+                });
 
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
-
-                    }
-                }).check();
     }
 
     private void getCurrentLocation(){
@@ -95,7 +98,10 @@ public class AdminViewLocation extends AppCompatActivity implements Listener, On
                 .setMaxWaitTime(100);
 
         easyWayLocation = new EasyWayLocation(getApplicationContext(),locationRequest,false,false,this);
-        smf.getMapAsync(this);
+        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+        getSupportFragmentManager().beginTransaction().add(R.id.mapFragment,mapFragment).commit();
+        mapFragment.getMapAsync(this);
+
     }
 
     @Override
@@ -111,7 +117,7 @@ public class AdminViewLocation extends AppCompatActivity implements Listener, On
             if (isFirstTime)
             {
                 isFirstTime = false;
-                map.addMarker(new MarkerOptions().position(latLng).title("My Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.person)));
+                map.addMarker(new MarkerOptions().position(latLng).title("My Location").icon(bitmapDescriptorFromVector(getApplicationContext(),R.drawable.person)));
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15f);
                 map.animateCamera(cameraUpdate);
                 setEmployeeData();
@@ -120,7 +126,14 @@ public class AdminViewLocation extends AppCompatActivity implements Listener, On
 
     }
 
-
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
     @Override
     public void locationCancelled() {
 
@@ -134,7 +147,7 @@ public class AdminViewLocation extends AppCompatActivity implements Listener, On
         {
             if (isFirstTime) {
                 isFirstTime = false;
-                map.addMarker(new MarkerOptions().position(latLng).title("My Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.person)));
+                map.addMarker(new MarkerOptions().position(latLng).title("My Location").icon(bitmapDescriptorFromVector(getApplicationContext(),R.drawable.person)));
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10f);
                 map.animateCamera(cameraUpdate);
                 setEmployeeData();
@@ -157,7 +170,7 @@ public class AdminViewLocation extends AppCompatActivity implements Listener, On
                 if (employeeLocations.size() > 0){
                     for (int i = 0;i<employeeLocations.size();i++){
                         LatLng latLng1 = new LatLng(employeeLocations.get(i).latitude,employeeLocations.get(i).longitude);
-                        map.addMarker(new MarkerOptions().position(latLng1).title(employeeLocations.get(i).employeeName).icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_pedal_bike_24)));
+                        map.addMarker(new MarkerOptions().position(latLng1).title(employeeLocations.get(i).employeeName).icon(bitmapDescriptorFromVector(getApplicationContext(),R.drawable.baseline_pedal_bike_24)));
                     }
                 }
             }

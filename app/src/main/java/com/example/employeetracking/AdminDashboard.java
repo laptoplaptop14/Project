@@ -19,6 +19,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.permissionx.guolindev.PermissionX;
+import com.permissionx.guolindev.callback.RequestCallback;
+
+import java.util.List;
 
 public class AdminDashboard extends AppCompatActivity {
     String Uid;
@@ -48,6 +52,13 @@ public class AdminDashboard extends AppCompatActivity {
 
         Uid=AppPref.getInstance(getApplicationContext()).getAdminData().id;
 
+        PermissionX.init(this)
+                .permissions(android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                .request(new RequestCallback() {
+                    @Override
+                    public void onResult(boolean allGranted, @NonNull List<String> grantedList, @NonNull List<String> deniedList) {
+                    }
+                });
         AdminProfileName();
         CountEmployee();
     }

@@ -1,19 +1,29 @@
 package com.example.employeetracking;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.easywaylocation.EasyWayLocation;
+import com.example.easywaylocation.GetLocationDetail;
 import com.example.easywaylocation.Listener;
+import com.example.easywaylocation.LocationData;
+import com.example.employeetracking.model.EmpCheckIn;
 import com.example.employeetracking.model.Employee;
 import com.example.employeetracking.model.EmployeeLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -23,6 +33,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -38,20 +49,27 @@ import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.permissionx.guolindev.PermissionX;
+import com.permissionx.guolindev.callback.RequestCallback;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
-public class EmployeeDashboard extends AppCompatActivity implements Listener, OnMapReadyCallback {
+public class EmployeeDashboard extends AppCompatActivity implements Listener, OnMapReadyCallback, LocationData.AddressCallBack {
 
     EasyWayLocation easyWayLocation;
-    Button b1, b2;
-    SupportMapFragment smf;
-    FusedLocationProviderClient cli;
+    Button b1;
+
+    GetLocationDetail getLocationDetail;
     LatLng latLng;
     GoogleMap map;
     FirebaseDatabase data;
     DatabaseReference ref;
     boolean isFirstTime = true;
+
+    LocationData locationData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,40 +78,53 @@ public class EmployeeDashboard extends AppCompatActivity implements Listener, On
         data=FirebaseDatabase.getInstance();
         ref=data.getReference().child("Employee Tracking");
         b1 = (Button) findViewById(R.id.checkin);
-        b2 = (Button) findViewById(R.id.checkout);
-        smf = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
 
-        Dexter.withContext(getApplicationContext())
-                        .withPermissions(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION)
-                                .withListener(new MultiplePermissionsListener() {
-                                    @Override
-                                    public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
-                                        getCurrentLocation();
-                                    }
-
-                                    @Override
-                                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
-
-                                    }
-                                }).check();
+        PermissionX.init(this)
+                .permissions(android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                .request(new RequestCallback() {
+                    @Override
+                    public void onResult(boolean allGranted, @NonNull List<String> grantedList, @NonNull List<String> deniedList) {
+                        getCurrentLocation();
+                    }
+                });
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                b1.setVisibility(View.INVISIBLE);
-                b2.setVisibility(View.VISIBLE);
-            }
-        });
-
-        b2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                b2.setVisibility(View.INVISIBLE);
-                b1.setVisibility(View.VISIBLE);
+                if (locationData != null){
+                    addCheckInData();
+                }else{
+                    Toast.makeText(EmployeeDashboard.this, "Your Location not working...", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
+    private void addCheckInData() {
+        Employee emp = AppPref.getInstance(getApplicationContext()).getEmployeeData();
+        String currentDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date());
+        EmpCheckIn empCheckIn = new EmpCheckIn(emp.name,emp.id,emp.Userid,locationData.getFull_address(),currentDate);
+        ref.child("empCheckIn").child(emp.id).setValue(empCheckIn)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(EmployeeDashboard.this, "You have successfully check in...", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+    }
+
     private void getCurrentLocation(){
+
+        getLocationDetail = new GetLocationDetail(this,this);
+        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+        getSupportFragmentManager().beginTransaction().add(R.id.mapFragment,mapFragment).commit();
+        mapFragment.getMapAsync(this);
+
         LocationRequest locationRequest =  LocationRequest.create()
                 .setInterval(100)
                 .setFastestInterval(3000)
@@ -101,9 +132,15 @@ public class EmployeeDashboard extends AppCompatActivity implements Listener, On
                 .setMaxWaitTime(100);
 
         easyWayLocation = new EasyWayLocation(getApplicationContext(),locationRequest,false,false,this);
-        smf.getMapAsync(this);
+      }
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
-
 
     @Override
     public void locationOn() {
@@ -118,11 +155,12 @@ public class EmployeeDashboard extends AppCompatActivity implements Listener, On
             if (isFirstTime)
             {
                 isFirstTime = false;
-                map.addMarker(new MarkerOptions().position(latLng).title("My Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_pedal_bike_24)));
+                map.addMarker(new MarkerOptions().position(latLng).title("My Location").icon(bitmapDescriptorFromVector(getApplicationContext(),R.drawable.baseline_pedal_bike_24)));
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15f);
                 map.animateCamera(cameraUpdate);
             }
         }
+        getLocationDetail.getAddress(location.getLatitude(),location.getLongitude(),"AIzaSyBP3KhqaIgn51j-qkiRXIzeHP8SXlNOAs4");
         sendLocation(location);
     }
 
@@ -189,7 +227,7 @@ public class EmployeeDashboard extends AppCompatActivity implements Listener, On
         {
             if (isFirstTime) {
                 isFirstTime = false;
-                map.addMarker(new MarkerOptions().position(latLng).title("My Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_pedal_bike_24)));
+                map.addMarker(new MarkerOptions().position(latLng).title("My Location").icon(bitmapDescriptorFromVector(getApplicationContext(),R.drawable.baseline_pedal_bike_24)));
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10f);
                 map.animateCamera(cameraUpdate);
             }
@@ -215,6 +253,11 @@ public class EmployeeDashboard extends AppCompatActivity implements Listener, On
     protected void onPause() {
         super.onPause();
         easyWayLocation.endUpdates();
+    }
+
+    @Override
+    public void locationData(LocationData locationData) {
+        this.locationData = locationData;
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

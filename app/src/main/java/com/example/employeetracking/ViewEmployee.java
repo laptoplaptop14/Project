@@ -63,7 +63,6 @@ public class ViewEmployee extends AppCompatActivity implements MyAdpater.onclick
                 {
                     View_Employee_Detail view_employee_detail=db.getValue(View_Employee_Detail.class);
                     view_employee_detailArrayList.add(view_employee_detail);
-
                 }
                 myAdpater.notifyDataSetChanged();
             }

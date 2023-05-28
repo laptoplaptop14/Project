@@ -37,7 +37,6 @@ public class AdminViewProfile extends AppCompatActivity {
         email = (TextView) findViewById(R.id.text2);
         mono = (TextView) findViewById(R.id.text3);
 
-
         Intent intent=getIntent();
         Userdid=intent.getStringExtra("Userid");
 

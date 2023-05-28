@@ -14,4 +14,7 @@ public class EmployeeLocation {
         this.latitude = latitude;
         this.longitude = longitude;
     }
+
+    public EmployeeLocation() {
+    }
 }

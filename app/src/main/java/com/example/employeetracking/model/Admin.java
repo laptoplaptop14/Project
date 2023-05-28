@@ -6,4 +6,7 @@ public class Admin {
     public String mobileno;
     public String name;
     public String password;
+
+    public Admin() {
+    }
 }

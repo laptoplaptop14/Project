@@ -1,6 +1,7 @@
 package com.example.employeetracking;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,15 @@ public class MyAdpater extends RecyclerView.Adapter<MyAdpater.MyViewHolder>
             @Override
             public void onClick(View view) {
                 onclick.onDelete(view_employee_detail.getId());
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context,EmpCheckInActivity.class);
+                i.putExtra("empId",view_employee_detail.id);
+                context.startActivity(i);
             }
         });
     }
