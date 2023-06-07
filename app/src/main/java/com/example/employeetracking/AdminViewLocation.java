@@ -170,7 +170,7 @@ public class AdminViewLocation extends AppCompatActivity implements Listener, On
                 if (employeeLocations.size() > 0){
                     for (int i = 0;i<employeeLocations.size();i++){
                         LatLng latLng1 = new LatLng(employeeLocations.get(i).latitude,employeeLocations.get(i).longitude);
-                        map.addMarker(new MarkerOptions().position(latLng1).title(employeeLocations.get(i).employeeName).icon(bitmapDescriptorFromVector(getApplicationContext(),R.drawable.baseline_pedal_bike_24)));
+                        map.addMarker(new MarkerOptions().position(latLng1).title(employeeLocations.get(i).employeeName).icon(bitmapDescriptorFromVector(getApplicationContext(),R.drawable.tracklocation)));
                     }
                 }
             }

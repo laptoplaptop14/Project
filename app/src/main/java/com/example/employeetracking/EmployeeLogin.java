@@ -40,7 +40,6 @@ public class EmployeeLogin extends AppCompatActivity {
         ref=data.getReference();
 
         image=(ImageView)findViewById(R.id.image);
-        t1=(TextView)findViewById(R.id.text1);
         e1=(EditText)findViewById(R.id.edit1);
         e2=(EditText)findViewById(R.id.edit2);
         b1=(Button)findViewById(R.id.btn);
@@ -64,14 +63,6 @@ public class EmployeeLogin extends AppCompatActivity {
                 {
                     LoginWithEmployee(email,password);
                 }
-            }
-        });
-
-        t1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(EmployeeLogin.this,EmployeeForgetPassword.class);
-                startActivity(intent);
             }
         });
     }

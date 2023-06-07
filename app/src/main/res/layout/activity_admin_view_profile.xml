@@ -32,11 +32,11 @@
         android:layout_marginEnd="20dp"
         android:hint="name"
         android:background="@drawable/textshape"
-        android:drawableStart="@drawable/person"
-        android:drawablePadding="5dp"
         android:ems="10"
+        android:paddingLeft="47dp"
+        android:paddingTop="14dp"
+        android:textColor="#0C0C0C"
         android:inputType="textPersonName"
-        android:paddingLeft="14dp"
         app:layout_constraintEnd_toEndOf="@+id/image"
         app:layout_constraintStart_toStartOf="@+id/image"
         app:layout_constraintTop_toBottomOf="@+id/image" />
@@ -50,11 +50,11 @@
         android:layout_marginEnd="20dp"
         android:hint="name"
         android:background="@drawable/textshape"
-        android:drawableStart="@drawable/email"
-        android:drawablePadding="5dp"
         android:ems="10"
+        android:paddingLeft="47dp"
+        android:paddingTop="14dp"
+        android:textColor="#0C0C0C"
         android:inputType="textPersonName"
-        android:paddingLeft="14dp"
         app:layout_constraintEnd_toEndOf="@+id/text1"
         app:layout_constraintStart_toStartOf="@+id/text1"
         app:layout_constraintTop_toBottomOf="@+id/text1" />
@@ -66,15 +66,44 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:hint="name"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/textshape"
-        android:drawableStart="@drawable/phone"
-        android:drawablePadding="5dp"
         android:ems="10"
+        android:paddingLeft="47dp"
+        android:paddingTop="14dp"
+        android:textColor="#0C0C0C"
+        android:hint="name"
         android:inputType="textPersonName"
-        android:paddingLeft="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/text2"
         app:layout_constraintStart_toStartOf="@+id/text2"
         app:layout_constraintTop_toBottomOf="@+id/text2" />
+
+    <ImageView
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/person"
+        app:layout_constraintStart_toStartOf="@+id/text1"
+        app:layout_constraintTop_toTopOf="@+id/text1" />
+
+    <ImageView
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/email"
+        app:layout_constraintStart_toStartOf="@+id/text2"
+        app:layout_constraintTop_toTopOf="@+id/text2" />
+
+    <ImageView
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/phone"
+        app:layout_constraintStart_toStartOf="@+id/text3"
+        app:layout_constraintTop_toTopOf="@+id/text3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

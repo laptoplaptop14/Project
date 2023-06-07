@@ -169,7 +169,7 @@ public class EmployeeDashboard extends AppCompatActivity implements Listener, On
             if (isFirstTime)
             {
                 isFirstTime = false;
-                map.addMarker(new MarkerOptions().position(latLng).title("My Location").icon(bitmapDescriptorFromVector(getApplicationContext(),R.drawable.baseline_pedal_bike_24)));
+                map.addMarker(new MarkerOptions().position(latLng).title("My Location").icon(bitmapDescriptorFromVector(getApplicationContext(),R.drawable.tracklocation)));
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15f);
                 map.animateCamera(cameraUpdate);
             }
@@ -241,7 +241,7 @@ public class EmployeeDashboard extends AppCompatActivity implements Listener, On
         {
             if (isFirstTime) {
                 isFirstTime = false;
-                map.addMarker(new MarkerOptions().position(latLng).title("My Location").icon(bitmapDescriptorFromVector(getApplicationContext(),R.drawable.baseline_pedal_bike_24)));
+                map.addMarker(new MarkerOptions().position(latLng).title("My Location").icon(bitmapDescriptorFromVector(getApplicationContext(),R.drawable.tracklocation)));
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10f);
                 map.animateCamera(cameraUpdate);
             }

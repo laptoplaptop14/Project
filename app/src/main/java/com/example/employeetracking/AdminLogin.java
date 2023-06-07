@@ -27,7 +27,7 @@ public class AdminLogin extends AppCompatActivity {
     FirebaseDatabase data;
     DatabaseReference ref;
     ImageView image;
-    TextView t1, t2;
+    TextView t1;
     EditText e1, e2;
     Button b1;
     @SuppressLint("MissingInflatedId")
@@ -41,7 +41,6 @@ public class AdminLogin extends AppCompatActivity {
 
         image = (ImageView) findViewById(R.id.image);
         t1 = (TextView) findViewById(R.id.text1);
-        t2 = (TextView) findViewById(R.id.text2);
         e1 = (EditText) findViewById(R.id.edit1);
         e2 = (EditText) findViewById(R.id.edit2);
         b1 = (Button) findViewById(R.id.btn);
@@ -69,14 +68,6 @@ public class AdminLogin extends AppCompatActivity {
         });
 
         t1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(AdminLogin.this,AdminForgetPassword.class);
-                startActivity(intent);
-            }
-        });
-
-        t2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(AdminLogin.this,AdminRegister.class);
